@@ -1,0 +1,156 @@
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="card register-card p-4 shadow-sm">
+
+                <div class="text-center mb-4">
+                    <h3 class="title">Create Account</h3>
+                    <p class="subtitle text-muted">Fill in the details to register a new user</p>
+                </div>
+
+                <form [formGroup]="userForm">
+                    <div class="row g-3">
+
+                        <!-- <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" 
+                                        [class.is-invalid]="userForm.get('depid')?.invalid && userForm.get('depid')?.touched"
+                                        formControlName="depid">
+                                    <option value="">Select Department</option>
+                                    @for(dept of departmentList; track dept.id){
+                                        <option [value]="dept.id">{{dept.departmentName}}</option>
+                                    }
+                                </select>
+                                <label>Department</label>
+                                @if (userForm.get('Department')?.invalid && userForm.get('Department')?.touched) {
+                                    <div class="invalid-feedback d-block">Please select a department.</div>
+                                }
+                            </div>
+                        </div> -->
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select"
+                                    [class.is-invalid]="userForm.get('depid')?.invalid && userForm.get('depid')?.touched"
+                                    formControlName="depid">
+                                    <option value="">Select Department</option>
+
+                                    @for(dept of departmentList(); track dept.id){
+                                    <option [value]="dept.id">{{dept.departmentName}}</option>
+                                    }
+                                </select>
+                                <label>Department</label>
+
+                                @if (userForm.get('depid')?.invalid && userForm.get('depid')?.touched) {
+                                <div class="invalid-feedback d-block">Please select a department.</div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control"
+                                    [class.is-invalid]="userForm.get('UserName')?.invalid && userForm.get('UserName')?.touched"
+                                    formControlName="UserName" placeholder="Username">
+                                <label>Username</label>
+                                @if (userForm.get('UserName')?.invalid && userForm.get('UserName')?.touched) {
+                                <div class="invalid-feedback d-block">Username is required (min 3 chars).</div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="email" class="form-control"
+                                    [class.is-invalid]="userForm.get('Email')?.invalid && userForm.get('Email')?.touched"
+                                    formControlName="Email" placeholder="Email">
+                                <label>Email Address</label>
+                                @if (userForm.get('Email')?.touched && userForm.get('Email')?.invalid) {
+                                <div class="invalid-feedback d-block">
+                                    @if (userForm.get('Email')?.errors?.['required']) { Email is required. }
+                                    @if (userForm.get('Email')?.errors?.['email']) { Please enter a valid email. }
+                                </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control"
+                                    [class.is-invalid]="userForm.get('FirstName')?.invalid && userForm.get('FirstName')?.touched"
+                                    formControlName="FirstName" placeholder="First Name">
+                                <label>First Name</label>
+                                @if (userForm.get('FirstName')?.invalid && userForm.get('FirstName')?.touched) {
+                                <div class="invalid-feedback d-block">First name is required.</div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control"
+                                    [class.is-invalid]="userForm.get('LastName')?.invalid && userForm.get('LastName')?.touched"
+                                    formControlName="LastName" placeholder="Last Name">
+                                <label>Last Name</label>
+                                @if (userForm.get('LastName')?.invalid && userForm.get('LastName')?.touched) {
+                                <div class="invalid-feedback d-block">Last name is required.</div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="password" class="form-control"
+                                    [class.is-invalid]="userForm.get('Password')?.invalid && userForm.get('Password')?.touched"
+                                    formControlName="Password" placeholder="Password">
+                                <label>Password</label>
+                                @if (userForm.get('Password')?.touched && userForm.get('Password')?.invalid) {
+                                <div class="invalid-feedback d-block">
+                                    @if (userForm.get('Password')?.errors?.['required']) { Password is required. }
+                                    @if (userForm.get('Password')?.errors?.['minlength']) { Must be at least 6
+                                    characters. }
+                                </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select"
+                                    [class.is-invalid]="userForm.get('Role')?.invalid && userForm.get('Role')?.touched"
+                                    formControlName="Role">
+                                    <option value="">Select Role</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="User">User</option>
+                                </select>
+                                <label>Role</label>
+                                @if (userForm.get('Role')?.invalid && userForm.get('Role')?.touched) {
+                                <div class="invalid-feedback d-block">Please select a role.</div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" formControlName="managerid">
+                                    <option value="">Select Manager</option>
+                                    @for(mana of managerList(); track mana.managerid){
+                                    <option [value]="mana.managerid">{{mana.name}}</option>
+                                    }
+                                </select>
+                                <label>manager</label>
+
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button type="button" class="btn btn-primary w-100 py-2" (click)="Register()">
+                                Register User
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

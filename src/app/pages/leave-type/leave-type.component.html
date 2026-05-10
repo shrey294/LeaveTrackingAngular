@@ -1,0 +1,73 @@
+<div class="container my-5">
+  <!-- Form Card -->
+  <div class="card shadow-sm mb-5">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0"><i class="fa fa-calendar-alt me-2"></i>Leave Information</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="leaveForm" (ngSubmit)="onSave()">
+        
+        <div class="mb-3">
+          <label for="leaveName" class="form-label">Leave Name</label>
+          <input type="text" class="form-control" id="leaveName" formControlName="leaveName" placeholder="Enter leave name" required>
+          <div *ngIf="leaveForm.get('leaveName')?.invalid && leaveForm.get('leaveName')?.touched" class="text-danger mt-1">
+            Leave Name is required.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="leaveCode" class="form-label">Leave Code</label>
+          <input type="text" class="form-control" id="leaveCode" formControlName="leaveCode" placeholder="Enter leave code" required>
+          <div *ngIf="leaveForm.get('leaveCode')?.invalid && leaveForm.get('leaveCode')?.touched" class="text-danger mt-1">
+            Leave Code is required.
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100" [disabled]="leaveForm.invalid">
+          <i class="fa fa-save me-2"></i>Save
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Leave Types Table -->
+  <div class="card shadow-sm">
+    <div class="card-header bg-secondary text-white">
+      <h4 class="mb-0"><i class="fa fa-list me-2"></i>Existing Leave Types</h4>
+    </div>
+    <div class="card-body table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Leave Name</th>
+            <th>Leave Code</th>
+            <th>Status</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leave of leaveTypes">
+            <td>{{ leave.leaveName }}</td>
+            <td>{{ leave.leaveCode }}</td>
+            <td>
+              <span class="badge" [ngClass]="leave.isActive ? 'bg-success' : 'bg-danger'">
+                {{ leave.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td class="text-center">
+              <button (click)="onEdit(leave)" class="btn btn-warning btn-sm me-2" title="Edit">
+                <i class="fa fa-pencil-alt"></i>
+              </button>
+              <button (click)="onDelete(leave.leaveId)" class="btn btn-danger btn-sm" title="Delete">
+                <i class="fa fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="leaveTypes.length === 0">
+            <td colspan="4" class="text-center text-muted">No leave types available.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

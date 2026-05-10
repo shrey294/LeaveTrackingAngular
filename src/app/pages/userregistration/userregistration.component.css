@@ -1,0 +1,40 @@
+body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .register-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            background: #ffffff;
+        }
+
+        .form-control {
+            border-radius: 10px;
+        }
+
+        .form-select {
+            border-radius: 10px;
+        }
+
+        .btn-primary {
+            border-radius: 10px;
+            padding: 10px;
+            font-weight: 600;
+        }
+
+        .title {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #777;
+        }

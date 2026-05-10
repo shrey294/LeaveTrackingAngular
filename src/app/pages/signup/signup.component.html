@@ -1,0 +1,52 @@
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
+        <h2 class="fw-bold mb-2 text-primary text-center">Leave Tracker</h2>
+
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" placeholder="Enter email" required formControlName="email">
+                <small class="text-danger" *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.invalid">
+                 email is required
+              </small>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" placeholder="Enter username" required formControlName="username">
+                <small class="text-danger" *ngIf="signupForm.get('username')?.touched && signupForm.get('username')?.invalid">
+                 username is required
+              </small>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" placeholder="Enter password" required formControlName="password">
+                <small class="text-danger" *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.invalid">
+                Password is required
+              </small>
+            </div>
+
+            <button
+  type="submit"
+  class="btn btn-primary w-100"
+  [disabled]="isLoading || signupForm.invalid">
+
+  <ng-container *ngIf="!isLoading; else loadingTpl">
+    Register
+  </ng-container>
+
+  <ng-template #loadingTpl>
+    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+    Registering...
+  </ng-template>
+
+</button>
+
+        </form>
+
+        <p class="text-center mt-3 mb-0">
+            Already have an account? <a routerLink="/login">Login</a>
+        </p>
+    </div>
+</div>
