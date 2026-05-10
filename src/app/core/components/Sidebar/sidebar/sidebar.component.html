@@ -1,0 +1,93 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+
+  <!-- Brand -->
+  <div class="sidebar-brand">
+    <div class="logo-mark">L</div>
+    <div *ngIf="!collapsed">
+      <div class="brand-name">LeaveDesk</div>
+      <div class="brand-role">{{ role }}</div>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="sidebar-nav">
+
+    <!-- Admin menu -->
+    <ng-container *ngIf="role === 'Admin'">
+      <div class="nav-label" *ngIf="!collapsed">Main</div>
+      <a *ngFor="let item of adminMenuItems"
+         class="nav-item-link"
+         [class.active]="isActive(item.route)"
+         (click)="navigate(item.route)"
+         [title]="collapsed ? item.label : ''">
+        <i class="fa {{ item.icon }}"></i>
+        <span *ngIf="!collapsed">{{ item.label }}</span>
+        <span *ngIf="!collapsed && item.badge" class="badge-pill">{{ item.badge }}</span>
+      </a>
+
+      <div class="nav-label" *ngIf="!collapsed" style="margin-top:16px">Management</div>
+      <a *ngFor="let item of managementMenuItems"
+         class="nav-item-link"
+         [class.active]="isActive(item.route)"
+         (click)="navigate(item.route)"
+         [title]="collapsed ? item.label : ''">
+        <i class="fa {{ item.icon }}"></i>
+        <span *ngIf="!collapsed">{{ item.label }}</span>
+      </a>
+    </ng-container>
+
+    <!-- User menu -->
+    <ng-container *ngIf="role === 'User'">
+      <div class="nav-label" *ngIf="!collapsed">My Leave</div>
+      <a *ngFor="let item of userMenuItems"
+         class="nav-item-link"
+         [class.active]="isActive(item.route)"
+         (click)="navigate(item.route)"
+         [title]="collapsed ? item.label : ''">
+        <i class="fa {{ item.icon }}"></i>
+        <span *ngIf="!collapsed">{{ item.label }}</span>
+      </a>
+    </ng-container>
+
+  </nav>
+
+  <!-- Footer -->
+<div class="sidebar-footer">
+  <div class="user-menu-wrapper">
+    
+    <!-- Popover menu (shown above the chip) -->
+    <div class="user-popover" *ngIf="showUserMenu">
+      <div class="popover-header">
+        <div class="avatar-sm">{{ userInitials }}</div>
+        <div>
+          <div class="popover-name">{{ fullName }}</div>
+          <div class="popover-role">{{ role }}</div>
+        </div>
+      </div>
+      <div class="popover-divider"></div>
+      <button class="popover-item" (click)="logout()">
+        <i class="fa fa-sign-out-alt"></i>
+        <span>Log out</span>
+      </button>
+    </div>
+
+    <!-- Clickable user chip -->
+    <div class="user-chip" 
+         (click)="toggleUserMenu()" 
+         [class.active]="showUserMenu"
+         [title]="collapsed ? fullName : ''">
+      <div class="avatar-sm">{{ userInitials }}</div>
+      <div *ngIf="!collapsed" class="user-info">
+        <div class="name">{{ fullName }}</div>
+        <div class="role-tag">{{ role }}</div>
+      </div>
+      <i *ngIf="!collapsed" class="fa fa-ellipsis-h chip-more"></i>
+    </div>
+
+  </div>
+</div>
+
+<!-- Backdrop to close menu when clicking outside -->
+<div class="menu-backdrop" *ngIf="showUserMenu" (click)="showUserMenu = false"></div>
+
+</aside>

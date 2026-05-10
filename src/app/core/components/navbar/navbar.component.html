@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+<!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
   <a class="navbar-brand" routerLink="/">Leave tracking</a>
 
   <ul class="navbar-nav ms-auto">
@@ -25,4 +25,56 @@
       <a class="nav-link text-danger" (click)="logout()">Logout</a>
     </li>
   </ul>
+</nav> -->
+<nav class="top-navbar">
+  <button class="sidebar-toggle" (click)="toggleSidebar()" aria-label="Toggle sidebar">
+    <i class="fa fa-bars"></i>
+  </button>
+
+  <div class="navbar-right">
+    <div class="notification-wrapper" (click)="toggleNotifications()">
+      <i class="fa fa-bell"></i>
+      <span class="notif-badge">3</span>
+    </div>
+  </div>
 </nav>
+<div class="notif-backdrop" *ngIf="showNotifications" (click)="showNotifications = false"></div>
+
+<!-- Notification Panel -->
+<div class="notif-panel" [class.open]="showNotifications">
+
+  <div class="notif-panel-header">
+    <span class="notif-title">Notifications</span>
+    <span class="notif-clear" (click)="markAllRead()">Mark all read</span>
+  </div>
+
+  <div class="notif-list">
+    <div
+      *ngFor="let n of notifications"
+      class="notif-item"
+      [class.unread]="!n.read"
+      (click)="markRead(n)">
+
+      <div class="notif-icon-wrap" [ngClass]="n.type">
+        <i class="fa" [ngClass]="getIcon(n.type)"></i>
+      </div>
+
+      <div class="notif-body">
+        <div class="notif-msg">{{ n.message }}</div>
+        <div class="notif-meta">
+          <span class="notif-name">{{ n.from }}</span>
+          <span class="notif-dot">·</span>
+          <span class="notif-time">{{ n.time }}</span>
+        </div>
+      </div>
+
+      <div class="unread-dot" *ngIf="!n.read"></div>
+    </div>
+  </div>
+
+  <div class="notif-footer">
+    <span>View all notifications</span>
+    <i class="fa fa-arrow-right"></i>
+  </div>
+
+</div>
