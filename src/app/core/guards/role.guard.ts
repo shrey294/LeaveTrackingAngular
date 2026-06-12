@@ -3,7 +3,7 @@ import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
 
 
-export const roleGuard: CanActivateFn = (route) => {
+export const roleGuard: CanActivateFn = (route,state) => {
 
   const auth = inject(AuthService);
   const router = inject(Router);
@@ -12,24 +12,19 @@ export const roleGuard: CanActivateFn = (route) => {
     router.navigate(['/login']);
     return false;
   }
+   const permissions = auth.getPermissions();
+  const currentRoute = state.url.split('?')[0];
 
-  const expectedRole = route.data['role'];
-  const userRole = auth.getRoleFromToken();
-console.log('Expected Role:', expectedRole);
-console.log('User Role:', userRole);
-  if (!expectedRole || !userRole) {
-    router.navigate(['/unauthorized']);
-    return false;
-  }
+const hasPermission = permissions.some(
+  permission => currentRoute.startsWith(permission)
+);
+  
 
-  // normalize roles
-  const normalizedUserRole = userRole.toLowerCase();
-  const normalizedExpectedRole = expectedRole.toLowerCase();
-
-  if (normalizedUserRole === normalizedExpectedRole) {
+if (hasPermission) {
     return true;
   }
 
+  
   router.navigate(['/unauthorized']);
   return false;
 };

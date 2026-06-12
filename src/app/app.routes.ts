@@ -36,24 +36,35 @@ export const routes: Routes = [
             {
                 path:'userregistration',
                 canActivate:[authGuard,roleGuard],
-                data:{role:'Admin'},
+                
                 loadComponent:()=>import('./pages/userregistration/userregistration.component').then(m=>m.UserregistrationComponent)
             },
             {
                 path:'department',
                 canActivate:[authGuard,roleGuard],
-                data: { role: 'Admin' },
+                
                 loadComponent:()=>import('./pages/department/department.component').then(m=>m.DepartmentComponent)
             },
             {
                 path:'leavetype',
                 canActivate:[authGuard,roleGuard],
-                data:{role:'Admin'},
+                
                 loadComponent:()=>import('./pages/leave-type/leave-type.component').then(m=>m.LeaveTypeComponent)
+            },
+            {
+                path:'leave-assignment',
+                canActivate:[authGuard,roleGuard],
+                
+                loadComponent:()=>import('./pages/leaveassignment/leaveassignment.component').then(m=>m.LeaveassignmentComponent)
             },
             {
                 path:'unauthorized',
                 component:UnauthorizedComponent
+            },
+            {
+                path:'menumaster',
+                canActivate:[authGuard],
+                loadComponent:()=>import('./pages/menu-master/menu-master.component').then(m=>m.MenuMasterComponent)
             }
             
         ]

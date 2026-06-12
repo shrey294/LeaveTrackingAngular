@@ -1,0 +1,324 @@
+<!-- Leave Assignment Component -->
+<div class="la-page">
+
+  <!-- Sidebar accent -->
+  <div class="la-sidebar-accent"></div>
+
+  <div class="la-container">
+
+    <!-- Page Header -->
+    <div class="la-header">
+      <div class="la-header-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+          <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"></path>
+        </svg>
+      </div>
+      <div>
+        <h1 class="la-title">Leave Assignment</h1>
+        <p class="la-subtitle">Assign leave quotas to departments by leave type</p>
+      </div>
+      <div class="la-breadcrumb">
+        <span>Dashboard</span>
+        <span class="la-breadcrumb-sep">›</span>
+        <span>Leave Management</span>
+        <span class="la-breadcrumb-sep">›</span>
+        <span class="la-breadcrumb-active">Leave Assignment</span>
+      </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="la-layout">
+
+      <!-- Form Card -->
+      <div class="la-card la-form-card">
+        <div class="la-card-header">
+          <div class="la-card-header-dot"></div>
+          <h2 class="la-card-title">Assignment Details</h2>
+        </div>
+
+        <!-- Alert Messages -->
+        <div *ngIf="successMessage" class="la-alert la-alert-success" role="alert">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <span>{{ successMessage }}</span>
+          <button class="la-alert-close" (click)="successMessage = ''">✕</button>
+        </div>
+
+        <div *ngIf="errorMessage" class="la-alert la-alert-error" role="alert">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>{{ errorMessage }}</span>
+          <button class="la-alert-close" (click)="errorMessage = ''">✕</button>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="leaveForm" (ngSubmit)="onSubmit()" novalidate>
+
+          <!-- Department Field -->
+          <div class="la-field-group">
+            <label class="la-label" for="deptId">
+              Department
+              <span class="la-required">*</span>
+            </label>
+            <div class="la-select-wrapper" [class.la-input-error]="isFieldInvalid('deptId')">
+              <svg class="la-select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              <select id="deptId" class="la-select" formControlName="deptId">
+                <option value="">— Select Department —</option>
+                <option *ngFor="let dept of departmentList" [value]="dept.id">
+                  {{ dept.departmentName }}
+                </option>
+              </select>
+              <svg class="la-select-caret" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="la-error-msg" *ngIf="isFieldInvalid('deptId')">
+              Please select a department.
+            </div>
+          </div>
+
+          <!-- Leave Type Field -->
+          <div class="la-field-group">
+            <label class="la-label" for="leaveTypeId">
+              Leave Type
+              <span class="la-required">*</span>
+            </label>
+            <div class="la-select-wrapper" [class.la-input-error]="isFieldInvalid('leaveTypeId')">
+              <svg class="la-select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+              <select id="leaveTypeId" class="la-select" formControlName="leaveTypeId">
+                <option value="">— Select Leave Type —</option>
+                <option *ngFor="let lt of leaveTypes" [value]="lt.leaveId">
+                  {{ lt.leaveName }}
+                </option>
+              </select>
+              <svg class="la-select-caret" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="la-error-msg" *ngIf="isFieldInvalid('leaveTypeId')">
+              Please select a leave type.
+            </div>
+          </div>
+
+          <!-- Total Leaves Field -->
+          <div class="la-field-group">
+            <label class="la-label" for="totalLeaves">
+              Total Leaves (Days)
+              <span class="la-required">*</span>
+            </label>
+            <div class="la-input-wrapper" [class.la-input-error]="isFieldInvalid('totalLeaves')">
+              <svg class="la-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <input id="totalLeaves" type="number" class="la-input" formControlName="totalLeaves"
+                placeholder="e.g. 12" min="1" max="365" />
+            </div>
+            <div class="la-error-msg" *ngIf="isFieldInvalid('totalLeaves')">
+              <ng-container *ngIf="leaveForm.get('totalLeaves')?.errors?.['required']">
+                Total leaves is required.
+              </ng-container>
+              <ng-container *ngIf="leaveForm.get('totalLeaves')?.errors?.['min']">
+                Minimum value is 1.
+              </ng-container>
+              <ng-container *ngIf="leaveForm.get('totalLeaves')?.errors?.['max']">
+                Maximum value is 365.
+              </ng-container>
+            </div>
+            <div class="la-hint">Enter number of leave days to allocate (1 – 365)</div>
+          </div>
+
+          <!-- Preview Banner -->
+          <div class="la-preview" *ngIf="leaveForm.get('deptId')?.value && leaveForm.get('leaveTypeId')?.value && leaveForm.get('totalLeaves')?.value">
+            <div class="la-preview-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <p class="la-preview-text">
+              Assigning <strong>{{ leaveForm.get('totalLeaves')?.value }} days</strong> of
+              <strong>{{ getSelectedLeaveTypeName() }}</strong> to
+              <strong>{{ getSelectedDeptName() }}</strong>
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="la-actions">
+            <button type="button" class="la-btn la-btn-outline" (click)="onReset()" [disabled]="isSubmitting">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 .49-3.5"></path>
+              </svg>
+              Reset
+            </button>
+            <button type="submit" class="la-btn la-btn-primary" [disabled]="isSubmitting">
+              <span *ngIf="!isSubmitting">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Assign Leave
+              </span>
+              <span *ngIf="isSubmitting" class="la-spinner-wrap">
+                <span class="la-spinner"></span>
+                Processing...
+              </span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="la-right-panel">
+
+        <!-- Stats Cards -->
+        <div class="la-stats-grid">
+          <div class="la-stat-card la-stat-blue">
+            <div class="la-stat-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="la-stat-value">{{ departmentList.length }}</div>
+              <div class="la-stat-label">Departments</div>
+            </div>
+          </div>
+          <div class="la-stat-card la-stat-teal">
+            <div class="la-stat-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="la-stat-value">{{ leaveTypes.length }}</div>
+              <div class="la-stat-label">Leave Types</div>
+            </div>
+          </div>
+          <div class="la-stat-card la-stat-amber">
+            <div class="la-stat-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div>
+              <div class="la-stat-value">{{ recentAssignments.length }}</div>
+              <div class="la-stat-label">Assigned Today</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Assignments -->
+        <div class="la-card la-recent-card">
+          <div class="la-card-header">
+            <div class="la-card-header-dot la-dot-teal"></div>
+            <h2 class="la-card-title">Recent Assignments</h2>
+          </div>
+
+          <div *ngIf="recentAssignments.length === 0" class="la-empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <p>No assignments yet. Submit the form to see records here.</p>
+          </div>
+
+          <div class="la-recent-list" *ngIf="recentAssignments.length > 0">
+            <div class="la-recent-item" *ngFor="let item of recentAssignments; let i = index"
+              [style.animation-delay]="(i * 0.05) + 's'">
+              <div class="la-recent-badge">{{ item.totalLeaves }}</div>
+              <div class="la-recent-details">
+                <div class="la-recent-dept">{{ item.department }}</div>
+                <div class="la-recent-type">{{ item.leaveType }}</div>
+              </div>
+              <div class="la-recent-time">{{ item.assignedOn | date:'HH:mm' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="la-info-box">
+          <div class="la-info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </div>
+          <div class="la-info-content">
+            <h4>How it works</h4>
+            <ul>
+              <li>Select a department and leave type combination.</li>
+              <li>Enter the total number of days to allocate.</li>
+              <li>Used and remaining leaves are auto-calculated by the system.</li>
+              <li>Each assignment applies to all employees in the department.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="la-table-wrapper">
+      <table class="la-table">
+        <thead>
+          <tr>
+            <th>#</th>
+              <th>Department</th>
+              <th>Leave Type</th>
+              <th>Total Leaves</th>
+              <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of deptLeaveAssignments; let i=index">
+            <td>{{i+1}}</td>
+            <td>{{row.deptName}}</td>
+            <td>{{row.leaveTypeName}}</td>
+            <td>{{row.totalLeaves}}</td>
+            <td>
+                <button class="la-btn-edit" (click)="onEdit(row)" title="Edit">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                  Edit
+                </button>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -15,7 +15,7 @@
     <!-- Admin menu -->
     <ng-container *ngIf="role === 'Admin'">
       <div class="nav-label" *ngIf="!collapsed">Main</div>
-      <a *ngFor="let item of adminMenuItems"
+      <a *ngFor="let item of menuItems"
          class="nav-item-link"
          [class.active]="isActive(item.route)"
          (click)="navigate(item.route)"
@@ -25,8 +25,12 @@
         <span *ngIf="!collapsed && item.badge" class="badge-pill">{{ item.badge }}</span>
       </a>
 
+      
+    </ng-container>
+    <!--manager menu-->
+    <ng-container *ngIf="role=== 'Manager'">
       <div class="nav-label" *ngIf="!collapsed" style="margin-top:16px">Management</div>
-      <a *ngFor="let item of managementMenuItems"
+      <a *ngFor="let item of menuItems"
          class="nav-item-link"
          [class.active]="isActive(item.route)"
          (click)="navigate(item.route)"
@@ -35,11 +39,10 @@
         <span *ngIf="!collapsed">{{ item.label }}</span>
       </a>
     </ng-container>
-
     <!-- User menu -->
     <ng-container *ngIf="role === 'User'">
       <div class="nav-label" *ngIf="!collapsed">My Leave</div>
-      <a *ngFor="let item of userMenuItems"
+      <a *ngFor="let item of menuItems"
          class="nav-item-link"
          [class.active]="isActive(item.route)"
          (click)="navigate(item.route)"

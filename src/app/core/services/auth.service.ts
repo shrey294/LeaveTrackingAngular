@@ -102,6 +102,25 @@ export class AuthService {
     }
   }
   logout() {
-    localStorage.removeItem('token');
+    localStorage.clear();
+  }
+  storePermissions(permissions: string[]) {
+  localStorage.setItem(
+    'permissions',
+    JSON.stringify(permissions)
+  );
+}
+getPermissions(): string[] {
+    return JSON.parse(
+      localStorage.getItem('permissions') || '[]'
+    );
+  }
+   hasPermission(route: string): boolean {
+
+    const permissions = this.getPermissions();
+
+    return permissions.some(
+      permission => route.startsWith(permission)
+    );
   }
 }

@@ -43,6 +43,7 @@ export class LoginComponent {
       next:(res)=>{
         this.auth.storeToken(res.accessToken);
         this.auth.storeRefreshtoken(res.refreshToken);
+        this.auth.storePermissions(res.permission)
         const tokenpayload = this.auth.decodetoken();
         this.userstore.setName(tokenpayload.name);
         this.userstore.setRole(tokenpayload.role);

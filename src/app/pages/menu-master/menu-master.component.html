@@ -1,0 +1,40 @@
+<div class="dropdown-container mt-3">
+  <h3 class="mb-4 text-center">Select Role and Menu</h3>
+
+  <form>
+    <!-- Role Dropdown -->
+    <div class="mb-3">
+      <label for="roleSelect" class="form-label">Role</label>
+      <select
+        class="form-select"
+        id="roleSelect"
+        [(ngModel)]="selectedRole"
+        name="role">
+        <option value="Manager">Manager</option>
+        <option value="User">User</option>
+      </select>
+    </div>
+
+    <!-- Menu Dropdown -->
+    <div class="mb-3">
+      <label for="menuSelect" class="form-label">Menu</label>
+      <select
+        class="form-select"
+        id="menuSelect"
+        [(ngModel)]="selectedMenuId"
+        name="menu">
+        <option [value]="0">Select Menu</option>
+        <option *ngFor="let menu of menunameList" [value]="menu.menuId">
+          {{ menu.label }}
+        </option>
+      </select>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-primary w-100"
+      (click)="saveMapping()">
+      Save
+    </button>
+  </form>
+</div>

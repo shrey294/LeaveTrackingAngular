@@ -4,6 +4,7 @@ import { UserStoreService } from '../../../services/user-store.service';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
+import { MenuService } from '../../../services/menu.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -20,32 +21,16 @@ export class SidebarComponent implements OnInit {
   public fullName :string = "";
   public role!:string;
   private auth = inject(AuthService);
+  private menuservice = inject(MenuService);
   private userstore = inject(UserStoreService);
   private router = inject(Router);
 
-  adminMenuItems = [
-    { label: 'Dashboard',       icon: 'fa-tachometer-alt', route: '/dashboard',        badge: null },
-    { label: 'Leave Assignment', icon: 'fa-calendar-check', route: '/leave-assignment', badge: '12' },
-    { label: 'Leave Requests',  icon: 'fa-file-alt',        route: '/leave-requests',   badge: '4' },
-    { label: 'Reports',         icon: 'fa-chart-line',      route: '/reports',          badge: null },
-  ];
-
-  managementMenuItems = [
-    { label: 'User Registration', icon: 'fa-users',     route: '/userregistration', badge: null },
-    { label: 'Departments',       icon: 'fa-sitemap',   route: '/department',       badge: null },
-    { label: 'Leave Types',       icon: 'fa-tags',      route: '/leavetype',        badge: null },
-    { label: 'Settings',          icon: 'fa-cog',       route: '/settings',         badge: null },
-  ];
-
-   userMenuItems = [
-    { label: 'My Leaves',    icon: 'fa-calendar-alt', route: '/my-leaves',    badge: null },
-    { label: 'Apply Leave',  icon: 'fa-plus-circle',  route: '/apply-leave',  badge: null },
-    { label: 'Leave Status', icon: 'fa-clock',        route: '/leave-status', badge: null },
-  ];
+  
+  menuItems: { menuId: number; menuOrder: number; label: string; icon: string; route: string; badge: string | null }[] = [];
   ngOnInit(): void {
     
     this.currentUrl = this.router.url;
-
+    
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd)
     ).subscribe((e: any) => {
@@ -60,16 +45,36 @@ export class SidebarComponent implements OnInit {
     this.userstore.getRole().subscribe(val=>{
       const role = this.auth.getRoleFromToken();
       this.role = val || role
+      this.getrolemenu(this.role);
     })
   }
   isActive(route: string): boolean {
     return this.currentUrl === route || this.currentUrl.startsWith(route + '/');
   }
-  
+
   navigate(route: string) {
     this.router.navigate([route]);
   }
-
+ getrolemenu(role:string){
+  
+  //console.log(role);
+  this.menuservice.getrolemenulist(role).subscribe({
+      next: (data: any[]) => {
+        // ✅ Map API response to menuItems
+        this.menuItems = data.map(item => ({
+          menuId:    item.menuId,
+          menuOrder: item.menuOrder,
+          label:     item.label,
+          icon:      item.icon,
+          route:     item.route,
+          badge:     item.badge ?? null
+        }));
+      },
+      error: (err) => {
+        console.error(err?.error?.message || 'Failed to load menu');
+      }
+    });
+ }
   logout(){
       this.auth.signOut();
   }
