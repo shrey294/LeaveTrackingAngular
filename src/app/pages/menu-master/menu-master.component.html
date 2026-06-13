@@ -38,3 +38,38 @@
     </button>
   </form>
 </div>
+
+<div class="card shadow-sm mt-5">
+    <div class="card-header bg-secondary text-white">
+      <h4 class="mb-0"><i class="fa fa-list me-2"></i>Existing Menu Assignments</h4>
+    </div>
+    <div class="card-body table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Role Name</th>
+            <th>Label</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let menu of menuList">
+            <td>{{ menu.role }}</td>
+            <td>{{ menu.label }}</td>
+            
+            <td class="text-center">
+              <button  class="btn btn-warning btn-sm me-2" title="Edit">
+                <i class="fa fa-pencil-alt"></i>
+              </button>
+              <button (click)="delete(menu.permission_id)" class="btn btn-danger btn-sm" title="Delete">
+                <i class="fa fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <!-- <tr *ngIf="leaveTypes.length === 0">
+            <td colspan="4" class="text-center text-muted">No leave types available.</td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+  </div>
