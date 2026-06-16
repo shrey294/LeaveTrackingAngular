@@ -10,23 +10,6 @@
 
                 <form [formGroup]="userForm">
                     <div class="row g-3">
-
-                        <!-- <div class="col-md-6">
-                            <div class="form-floating">
-                                <select class="form-select" 
-                                        [class.is-invalid]="userForm.get('depid')?.invalid && userForm.get('depid')?.touched"
-                                        formControlName="depid">
-                                    <option value="">Select Department</option>
-                                    @for(dept of departmentList; track dept.id){
-                                        <option [value]="dept.id">{{dept.departmentName}}</option>
-                                    }
-                                </select>
-                                <label>Department</label>
-                                @if (userForm.get('Department')?.invalid && userForm.get('Department')?.touched) {
-                                    <div class="invalid-feedback d-block">Please select a department.</div>
-                                }
-                            </div>
-                        </div> -->
                         <div class="col-md-6">
                             <div class="form-floating">
                                 <select class="form-select"
@@ -119,9 +102,9 @@
                                     [class.is-invalid]="userForm.get('Role')?.invalid && userForm.get('Role')?.touched"
                                     formControlName="Role">
                                     <option value="">Select Role</option>
-                                    <option value="Admin">Admin</option>
-                                    <option value="Manager">Manager</option>
-                                    <option value="User">User</option>
+                                    @for(role of RoleList(); track role.roleId){
+                                    <option [value]="role.roleId">{{role.roleName}}</option>
+                                    }
                                 </select>
                                 <label>Role</label>
                                 @if (userForm.get('Role')?.invalid && userForm.get('Role')?.touched) {

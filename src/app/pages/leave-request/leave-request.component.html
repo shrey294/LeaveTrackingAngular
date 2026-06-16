@@ -1,0 +1,131 @@
+<div class="container mt-4">
+
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4 class="mb-0">Leave Request</h4>
+    </div>
+
+    <div class="card-body">
+
+      <form [formGroup]="leaveForm">
+
+        <!-- Leave Type -->
+        <div class="mb-3">
+          <label class="form-label">Leave Type</label>
+          <select class="form-select" formControlName="leaveType">
+            <option value="">Select Leave Type</option>
+            <option *ngFor="let leave of leaveTypes" [value]="leave.leaveId">
+              {{ leave.leaveName }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Duration -->
+        <div class="mb-3">
+          <label class="form-label d-block">Duration</label>
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              formControlName="duration"
+              value="singleDay">
+            <label class="form-check-label">Single Day</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              formControlName="duration"
+              value="multipleDay">
+            <label class="form-check-label">Multiple Day</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              formControlName="duration"
+              value="hours">
+            <label class="form-check-label">Hours</label>
+          </div>
+        </div>
+
+        <!-- Single Day -->
+        <div
+          class="mb-3"
+          *ngIf="leaveForm.get('duration')?.value === 'singleDay'">
+
+          <label class="form-label">Date</label>
+          <input
+            type="date"
+            class="form-control"
+            formControlName="date">
+        </div>
+
+        <!-- Multiple Day -->
+        <div
+          class="row"
+          *ngIf="leaveForm.get('duration')?.value === 'multipleDay'">
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Start Date</label>
+            <input
+              type="date"
+              class="form-control"
+              formControlName="startDate">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">End Date</label>
+            <input
+              type="date"
+              class="form-control"
+              formControlName="endDate">
+          </div>
+
+        </div>
+
+        <!-- Hours -->
+        <div
+          class="mb-3"
+          *ngIf="leaveForm.get('duration')?.value === 'hours'">
+
+          <label class="form-label">Hours</label>
+
+          <select class="form-select" formControlName="hours">
+            <option value="">Select Hours</option>
+            <option *ngFor="let hour of hourOptions" [value]="hour">
+              {{ hour }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Reason -->
+        <div class="mb-3">
+          <label class="form-label">Reason</label>
+          <textarea
+            class="form-control"
+            rows="4"
+            formControlName="reason">
+          </textarea>
+        </div>
+
+        <!-- Button -->
+        <div class="text-end">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="applyLeave()">
+
+            Apply Leave
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+</div>

@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../core/services/user.service';
 import { userModel } from '../../core/Models/user.model';
 import { map } from 'rxjs';
+import { RoleserviceService } from '../../core/services/roleservice.service';
 
 @Component({
   selector: 'app-userregistration',
@@ -32,8 +33,9 @@ export class UserregistrationComponent {
   
   private toastr = inject(ToastrService);
 
-  private userservice = inject(UserService)
+  private userservice = inject(UserService);
 
+  private roleservice = inject(RoleserviceService); 
   
   departmentList = toSignal(
   this.service.getdepartmentlist().pipe(map(data => data.result)), 
@@ -42,12 +44,14 @@ export class UserregistrationComponent {
   managerList = toSignal(this.userservice.getmanagerslist().pipe(map(data=>data.result)),
   {initialValue:[]}
 );
-  
+
+  RoleList = toSignal(this.roleservice.getrolelist().pipe(map(data=>data)),{initialValue:[]});
   Register() {
     if (this.userForm.valid) {
       const payload: userModel = {
         ...this.userForm.value,
         deptid: Number(this.userForm.value.depid),
+        Role_id:Number(this.userForm.value.Role),
         managerid:Number(this.userForm.value.managerid)
       };
 

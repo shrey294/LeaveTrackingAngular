@@ -63,10 +63,19 @@ export const routes: Routes = [
             },
             {
                 path:'menumaster',
-                canActivate:[authGuard],
+                canActivate:[authGuard,roleGuard],
                 loadComponent:()=>import('./pages/menu-master/menu-master.component').then(m=>m.MenuMasterComponent)
+            },
+            {
+                path:'leaverequest',
+                canActivate:[authGuard,roleGuard],
+                loadComponent:()=>import('./pages/leave-request/leave-request.component').then(m=>m.LeaveRequestComponent)
+            },
+            {
+                path:'rolemaster',
+                canActivate:[authGuard,roleGuard],
+                loadComponent:()=>import('./pages/rolemaster/rolemaster.component').then(m=>m.RolemasterComponent)
             }
-            
         ]
     }
 ]
