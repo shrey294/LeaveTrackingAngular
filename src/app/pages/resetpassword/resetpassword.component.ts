@@ -33,8 +33,6 @@ export class ResetpasswordComponent implements OnInit {
     })
   }
   
-
-
   UpdatePassword(){
     this.isLoading = true;
     if (!this.password || this.password.trim() === '') {
