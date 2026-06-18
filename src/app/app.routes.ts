@@ -21,6 +21,14 @@ export const routes: Routes = [
             {
                 path:'signup',
                 loadComponent:()=>import('./pages/signup/signup.component').then(m=>m.SignupComponent)
+            },
+            {
+                path:'forgotpassword',
+                loadComponent:()=>import('./pages/forgotpassword/forgotpassword.component').then(m=>m.ForgotpasswordComponent)
+            },
+            {
+                path:'resetpassword',
+                loadComponent:()=>import('./pages/resetpassword/resetpassword.component').then(m=>m.ResetpasswordComponent)
             }
         ]
     },

@@ -18,6 +18,7 @@ export class RolemasterComponent implements OnInit {
   roleName: string = '';
   roleId: number = 0;   
   isEditMode: boolean = false;
+  isLoading: boolean = false;
 
   ngOnInit(): void {
     this.rolelist();
@@ -47,10 +48,10 @@ export class RolemasterComponent implements OnInit {
     return;
   }
 
+  this.isLoading = true;
+
   // UPDATE
   if (this.isEditMode && this.roleId > 0) {
-    //console.log(this.roleId)
-    //console.log(this.roleName)
     this.roleservice.updaterole(this.roleId, this.roleName).subscribe({
       next: (res: any) => {
         if (res.success) {
@@ -61,7 +62,13 @@ export class RolemasterComponent implements OnInit {
           this.toastr.error('Error', res.message);
         }
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        console.error(err);
+        this.toastr.error('Error', 'Unable to update role.');
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
     });
 
   }
@@ -78,7 +85,13 @@ export class RolemasterComponent implements OnInit {
           this.toastr.error('Error', res.message);
         }
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        console.error(err);
+        this.toastr.error('Error', 'Unable to save role.');
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
     });
 
   }

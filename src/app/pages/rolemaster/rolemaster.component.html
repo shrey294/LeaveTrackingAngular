@@ -5,10 +5,13 @@
         <!-- Role Dropdown -->
         <div class="mb-3">
             <label class="form-label">Role Name</label>
-            <input type="text" class="form-control" placeholder="Enter Role Name" name="rolename" [(ngModel)]="roleName">
+            <input type="text" class="form-control" placeholder="Enter Role Name" name="rolename" [(ngModel)]="roleName" [disabled]="isLoading">
         </div>
 
-        <button type="button" class="btn btn-primary w-100" (click)="save()"> Save </button>
+        <button type="button" class="btn btn-primary w-100" (click)="save()" [disabled]="isLoading">
+            <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin me-2"></i>{{ isEditMode ? 'Updating...' : 'Saving...' }}</span>
+            <span *ngIf="!isLoading">{{ isEditMode ? 'Update' : 'Save' }}</span>
+        </button>
     </form>
 </div>
 <div class="card shadow-sm mt-5">
