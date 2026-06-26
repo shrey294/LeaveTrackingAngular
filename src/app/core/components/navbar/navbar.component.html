@@ -6,7 +6,7 @@
   <div class="navbar-right">
     <div class="notification-wrapper" (click)="toggleNotifications()">
       <i class="fa fa-bell"></i>
-      <span class="notif-badge">3</span>
+      <span class="notif-badge">{{unreadCount}}</span>
     </div>
   </div>
 </nav>
@@ -17,30 +17,31 @@
 
   <div class="notif-panel-header">
     <span class="notif-title">Notifications</span>
-    <span class="notif-clear" (click)="markAllRead()">Mark all read</span>
+    <!-- <span class="notif-clear" (click)="markAllRead()">Mark all read</span> -->
   </div>
 
   <div class="notif-list">
     <div
       *ngFor="let n of notifications"
       class="notif-item"
-      [class.unread]="!n.read"
-      (click)="markRead(n)">
+      [class.unread]="!n.isRead"
+      
+      >
 
-      <div class="notif-icon-wrap" [ngClass]="n.type">
+      <!-- <div class="notif-icon-wrap" [ngClass]="n.type">
         <i class="fa" [ngClass]="getIcon(n.type)"></i>
-      </div>
+      </div> -->
 
-      <div class="notif-body">
+      <!-- <div class="notif-body">
         <div class="notif-msg">{{ n.message }}</div>
         <div class="notif-meta">
           <span class="notif-name">{{ n.from }}</span>
           <span class="notif-dot">·</span>
           <span class="notif-time">{{ n.time }}</span>
         </div>
-      </div>
+      </div> -->
 
-      <div class="unread-dot" *ngIf="!n.read"></div>
+      <div class="unread-dot" *ngIf="!n.isRead"></div>
     </div>
   </div>
 

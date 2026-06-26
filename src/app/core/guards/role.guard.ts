@@ -18,7 +18,7 @@ export const roleGuard: CanActivateFn = (route,state) => {
 const hasPermission = permissions.some(
   permission => currentRoute.startsWith(permission)
 );
-  
+
 
 if (hasPermission) {
     return true;
