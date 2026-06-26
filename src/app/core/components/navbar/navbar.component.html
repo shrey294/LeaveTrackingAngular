@@ -2,45 +2,55 @@
   <button class="sidebar-toggle" (click)="toggleSidebar()" aria-label="Toggle sidebar">
     <i class="fa fa-bars"></i>
   </button>
-
   <div class="navbar-right">
     <div class="notification-wrapper" (click)="toggleNotifications()">
       <i class="fa fa-bell"></i>
-      <span class="notif-badge">{{unreadCount}}</span>
+      <span class="notif-badge" *ngIf="unreadCount > 0">{{unreadCount}}</span>
     </div>
   </div>
 </nav>
+
 <div class="notif-backdrop" *ngIf="showNotifications" (click)="showNotifications = false"></div>
 
-<!-- Notification Panel -->
 <div class="notif-panel" [class.open]="showNotifications">
-
   <div class="notif-panel-header">
-    <span class="notif-title">Notifications</span>
-    <!-- <span class="notif-clear" (click)="markAllRead()">Mark all read</span> -->
+    <div class="notif-title-row">
+      <span class="notif-title">Notifications</span>
+      <span class="notif-count-badge" *ngIf="unreadCount > 0">{{unreadCount}}</span>
+    </div>
+    <span class="notif-clear" (click)="markAllRead()">Mark all read</span>
   </div>
 
   <div class="notif-list">
+    <div *ngIf="notifications.length === 0" class="notif-empty">
+      <i class="fa fa-bell-slash"></i>
+      <p>No notifications yet</p>
+    </div>
+
     <div
       *ngFor="let n of notifications"
       class="notif-item"
       [class.unread]="!n.isRead"
-      
-      >
+      (click)="markRead(n)">
 
-      <!-- <div class="notif-icon-wrap" [ngClass]="n.type">
-        <i class="fa" [ngClass]="getIcon(n.type)"></i>
-      </div> -->
+      <!-- Avatar -->
+      <div class="notif-avatar" [ngClass]="getAvatarClass(n.notificationType)">
+        {{ getInitials(n.senderUserName) }}
+      </div>
 
-      <!-- <div class="notif-body">
-        <div class="notif-msg">{{ n.message }}</div>
-        <div class="notif-meta">
-          <span class="notif-name">{{ n.from }}</span>
-          <span class="notif-dot">·</span>
-          <span class="notif-time">{{ n.time }}</span>
+      <!-- Body -->
+      <div class="notif-body">
+        <div class="notif-top">
+          <span class="notif-sender">{{ n.senderUserName }}</span>
+          <span class="notif-date">{{ n.createdDate | date:'dd-MM-yyyy HH:mm' }}</span>
         </div>
-      </div> -->
+        <span class="notif-type-pill" [ngClass]="getPillClass(n.notificationType)">
+          {{ getTypeLabel(n.notificationType) }}
+        </span>
+        <div class="notif-msg">{{ n.message }}</div>
+      </div>
 
+      <!-- Unread dot -->
       <div class="unread-dot" *ngIf="!n.isRead"></div>
     </div>
   </div>
@@ -49,5 +59,4 @@
     <span>View all notifications</span>
     <i class="fa fa-arrow-right"></i>
   </div>
-
 </div>

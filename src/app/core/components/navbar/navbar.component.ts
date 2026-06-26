@@ -80,6 +80,54 @@ export class NavbarComponent implements OnInit {
     };
     return map[type] ?? 'fa-bell';
   }
+  getInitials(name: string): string {
+  if (!name) return '?';
+  return name.split(' ')
+    .map(w => w[0])
+    .join('')
+    .substring(0, 2)
+    .toUpperCase();
+}
+getAvatarClass(type: string): string {
+  const map: Record<string, string> = {
+    'LeaveRequest' : 'avatar-blue',
+    'Assignment'   : 'avatar-green',
+    'Approved'     : 'avatar-green',
+    'Rejected'     : 'avatar-red'
+  };
+  return map[type] ?? 'avatar-blue';
+}
+getPillClass(type: string): string {
+  const map: Record<string, string> = {
+    'LeaveRequest' : 'pill-leave',
+    'Assignment'   : 'pill-assign',
+    'Approved'     : 'pill-approve',
+    'Rejected'     : 'pill-reject'
+  };
+  return map[type] ?? 'pill-leave';
+}
+
+getTypeLabel(type: string): string {
+  const map: Record<string, string> = {
+    'LeaveRequest' : 'Leave request',
+    'Assignment'   : 'Assignment',
+    'Approved'     : 'Approved',
+    'Rejected'     : 'Rejected'
+  };
+  return map[type] ?? type;
+}
+
+markRead(n: AppNotification) {
+  if (!n.isRead) {
+    n.isRead = true;
+    // this.notifsvc.markRead(n.notificationId);
+  }
+}
+
+markAllRead() {
+  this.notifications.forEach(n => n.isRead = true);
+  this.showNotifications = false;
+}
   logout(){
       this.auth.signOut();
   }
