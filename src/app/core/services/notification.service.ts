@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../Environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
@@ -16,8 +16,10 @@ export class NotificationService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
 
-  private _notification = new BehaviorSubject<AppNotification[]>([]);
-  notification$ = this._notification.asObservable();
+  //private _notification = new BehaviorSubject<AppNotification[]>([]);
+  //notification$ = this._notification.asObservable();
+  private _notification = signal<AppNotification[]>([]);
+  notification = this._notification.asReadonly();
 
   private hubConnection!: signalR.HubConnection;
 
@@ -27,8 +29,9 @@ export class NotificationService {
     }).withAutomaticReconnect().build();
 
     this.hubConnection.on('ReceiveNotification',(notif:AppNotification)=>{
-      const current = this._notification.getValue();
-      this._notification.next([notif,...current]);
+      //const current = this._notification.getValue();
+      //this._notification.next([notif,...current]);
+      this._notification.update(current=>[notif,...current]);
     });
     this.hubConnection.start()
     .then(() => {
@@ -44,9 +47,25 @@ export class NotificationService {
   }
   private loadunread():void {
     this.http.get<AppNotification[]>(`${this.baseurl}/Notification/GetUnreadNotifications`).subscribe({
-      next:list=>this._notification.next(list),
+      next:list=>this._notification.set(list),
       error:err=>console.log(err)
     });
   }
+  markRead(notificationId: number) {
+  return this.http.post(`${this.baseurl}/Notification/MarkAsRead`,notificationId);
+  }
+  markReadAll(Recevier_user_id:number){
+    console.log(Recevier_user_id);
+    return this.http.post(`${this.baseurl}/Notification/markAllRead`,Recevier_user_id);
+  }
+  markReadLocal(notificationId: number): void {
+  this._notification.update(list =>
+    list.map(n => n.notificationId === notificationId ? { ...n, isRead: true } : n)
+  );
+}
+
+markAllReadLocal(): void {
+  this._notification.update(list => list.map(n => ({ ...n, isRead: true })));
+}
   constructor() { }
 }

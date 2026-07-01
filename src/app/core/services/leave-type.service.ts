@@ -29,7 +29,7 @@ export class LeaveTypeService {
     return this.http.post(`${this.baseurl}/LeaveType/EditLeaveType`, leaveType);
   }
   deleteLeaveType(leaveId: number): Observable<any> {
-    console.log("from service",leaveId)
+    //console.log("from service",leaveId)
     return this.http.post(`${this.baseurl}/LeaveType/DeleteLeave`, { id: leaveId });
   }
 }

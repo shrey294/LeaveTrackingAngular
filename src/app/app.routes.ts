@@ -83,6 +83,11 @@ export const routes: Routes = [
                 path:'rolemaster',
                 canActivate:[authGuard,roleGuard],
                 loadComponent:()=>import('./pages/rolemaster/rolemaster.component').then(m=>m.RolemasterComponent)
+            },
+            {
+                path:'leaveapproval',
+                canActivate:[authGuard,roleGuard],
+                loadComponent:()=>import('./pages/leaveapproval/leaveapproval.component').then(m=>m.LeaveapprovalComponent)
             }
         ]
     }

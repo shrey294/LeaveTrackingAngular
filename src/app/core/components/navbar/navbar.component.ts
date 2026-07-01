@@ -1,19 +1,10 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, computed, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UserStoreService } from '../../services/user-store.service';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../services/notification.service';
 import { AppNotification } from '../../Models/AppNotification.model';
-
-// interface Notification {
-//   id: number;
-//   type: 'leave' | 'approval' | 'alert' | 'info';
-//   message: string;
-//   from: string;
-//   time: string;
-//   read: boolean;
-// }
 
 @Component({
   selector: 'app-navbar',
@@ -33,11 +24,14 @@ export class NavbarComponent implements OnInit {
   private userstore = inject(UserStoreService);
   private notifsvc = inject(NotificationService);
 
-  notifications: AppNotification[] = [];
+  //notifications: AppNotification[] = [];
+  notifications = computed(()=> this.notifsvc.notification());
+  
 
-  get unreadCount(): number {
-    return this.notifications.filter(n => !n.isRead).length;
-  }
+  // get unreadCount(): number {
+  //   return this.notifications.filter(n => !n.isRead).length;
+  // }
+  unreadCount = computed(()=>this.notifications().filter(n=>!n.isRead).length);
   ngOnInit(): void {
      
     this.userstore.getName().subscribe(val=>{
@@ -50,10 +44,10 @@ export class NavbarComponent implements OnInit {
       this.role = val || role
     });
     this.notifsvc.startconnection();
-    this.notifsvc.notification$.subscribe(list=>{
-      console.log(list);
-      this.notifications = list
-    });
+    // this.notifsvc.notification$.subscribe(list=>{
+    //   console.log(list);
+    //   this.notifications = list
+    // });
   }
   ngOnDestroy(): void {
     this.notifsvc.stopConnection();
@@ -119,14 +113,41 @@ getTypeLabel(type: string): string {
 
 markRead(n: AppNotification) {
   if (!n.isRead) {
-    n.isRead = true;
-    // this.notifsvc.markRead(n.notificationId);
+    
+     this.notifsvc.markRead(n.notificationId).subscribe({
+      next:(res:any)=>{
+        if(res.success){
+         // n.isRead = true;
+         this.notifsvc.markReadLocal(n.notificationId);
+        }
+      },
+      error: (err) => {
+      console.error('Error', err);
+    }
+     });
   }
 }
 
 markAllRead() {
-  this.notifications.forEach(n => n.isRead = true);
-  this.showNotifications = false;
+   if (!this.notifications().length) {
+    console.log(123);
+    return;
+  }
+  const receiverUserId = this.notifications()[0].recevierUserId;
+  //console.log(receiverUserId)
+  this.notifsvc.markReadAll(receiverUserId).subscribe({
+    next:(res:any)=>{
+      if(res.success) {
+        //this.notifications.forEach(n => n.isRead = true);
+        this.notifsvc.markAllReadLocal();
+      }
+    },
+    error: (err) => {
+      console.error('Error', err);
+    }
+  })
+  
+  //this.showNotifications = false;
 }
   logout(){
       this.auth.signOut();

@@ -61,7 +61,7 @@ export class SidebarComponent implements OnInit {
   this.menuservice.getrolemenulist(role).subscribe({
       next: (data: any[]) => {
         // ✅ Map API response to menuItems
-        console.log(data)
+        //console.log(data)
         this.menuItems = data.map(item => ({
           menuId:    item.menuId,
           menuOrder: item.menuOrder,
