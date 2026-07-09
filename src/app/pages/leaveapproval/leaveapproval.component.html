@@ -1,1 +1,223 @@
-<p>leaveapproval works!</p>
+<main class="container py-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-4">
+    <div>
+      <h3 class="page-title mb-1">Leave Approvals</h3>
+      <p class="subtle mb-0">Review and act on pending leave requests from your team.</p>
+    </div>
+    <button class="btn btn-dark rounded-3 px-3"><i class="fa-solid fa-download me-2"></i>Export</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="stat-icon" style="background: var(--warning-soft); color: var(--warning);"><i class="fa fa-hourglass-end"></i></span>
+          
+        </div>
+        <div class="stat-value">{{ userStats()?.pending }}</div>
+        <div class="stat-label">Pending</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="stat-icon" style="background: var(--success-soft); color: var(--success);"><i class="fa-solid fa-circle-check"></i></span>
+        </div>
+        <div class="stat-value">{{ userStats()?.approved_this_month }}</div>
+        <div class="stat-label">Approved this month</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="stat-icon" style="background: var(--danger-soft); color: var(--danger);"><i class="fa-solid fa-circle-xmark"></i></span>
+        </div>
+        <div class="stat-value">{{ userStats()?.rejected_this_month }}</div>
+        <div class="stat-label">Rejected this month</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="stat-icon" style="background: var(--brand-soft); color: var(--brand);"><i class="fa-solid fa-users"></i></span>
+        </div>
+        <div class="stat-value">{{ userStats()?.team_member_count }}</div>
+        <div class="stat-label">Team members</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar mb-3">
+    <div class="row g-2 align-items-center">
+      <div class="col-12 col-lg-5">
+        <div class="search-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input
+            type="text"
+            class="form-control search-input"
+            placeholder="Search by employee, leave type, reason..."
+            [(ngModel)]="searchTerm"
+          />
+        </div>
+      </div>
+      <div class="col-12 col-lg-7">
+        <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+          <button
+            class="filter-chip"
+            [class.active]="activeFilter === 'pending'"
+            (click)="setFilter('pending')"
+          >
+            Pending <span class="ms-1 opacity-75">{{ userStats()?.pending }}</span>
+          </button>
+          <button
+            class="filter-chip"
+            [class.active]="activeFilter === 'approved'"
+            (click)="setFilter('approved')"
+          >
+            Approved
+          </button>
+          <button
+            class="filter-chip"
+            [class.active]="activeFilter === 'rejected'"
+            (click)="setFilter('rejected')"
+          >
+            Rejected
+          </button>
+          <button
+            class="filter-chip"
+            [class.active]="activeFilter === 'all'"
+            (click)="setFilter('all')"
+          >
+            All
+          </button>
+          <select class="form-select form-select-sm w-auto" style="border-radius: 999px;" [(ngModel)]="selectedType">
+            <option *ngFor="let t of leaveTypes" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Request list -->
+  <div id="requestList">
+    <div class="request-card text-center py-5" *ngIf="filteredRequests.length === 0">
+      <i class="fa-solid fa-inbox" style="font-size:38px; color:var(--muted);"></i>
+      <h6 class="mt-3 mb-1">No requests here</h6>
+      <p class="subtle small mb-0">Nothing matches the current filter.</p>
+    </div>
+
+    <div class="request-card" *ngFor="let r of filteredRequests; trackBy: trackById">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+        <div class="d-flex gap-3">
+          <div class="avatar">{{ r.initials }}</div>
+          <div>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <h6 class="mb-0 fw-semibold">{{ r.name }}</h6>
+              <span class="badge-pill b-type">{{ r.type }}</span>
+
+              <span class="badge-pill b-pending" *ngIf="r.status === 'pending'">
+                <i class="fa-regular fa-hourglass me-1"></i>Pending
+              </span>
+              <span class="badge-pill b-approved" *ngIf="r.status === 'approved'">
+                <i class="fa-solid fa-check me-1"></i>Approved
+              </span>
+              <span class="badge-pill b-rejected" *ngIf="r.status === 'rejected'">
+                <i class="fa-solid fa-xmark me-1"></i>Rejected
+              </span>
+            </div>
+            <div class="meta mt-1">
+              <i class="fa-solid fa-calendar me-1"></i>{{ r.from }} → {{ r.to }}
+              <span class="dot"></span>
+              <i class="fa-solid fa-clock me-1"></i>{{ r.duration }}
+              <span class="dot"></span>
+              Applied {{ r.applied }}
+            </div>
+          </div>
+        </div>
+        <div class="d-flex gap-2 align-items-center">
+          <ng-container *ngIf="r.status !== 'pending'; else pendingActions">
+            <button class="btn btn-ghost btn-sm"><i class="fa-solid fa-eye me-1"></i>View</button>
+          </ng-container>
+          <ng-template #pendingActions>
+            <button class="btn btn-ghost btn-sm" (click)="openApprove(r.id)" title="Approve">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+            <button class="btn btn-reject btn-sm" (click)="openReject(r.id)">
+              <i class="fa-solid fa-xmark me-1"></i>Reject
+            </button>
+            <button class="btn btn-approve btn-sm" (click)="openApprove(r.id)">
+              <i class="fa-solid fa-check me-1"></i>Approve
+            </button>
+          </ng-template>
+        </div>
+      </div>
+      <div class="reason"><i class="fa-solid fa-quote-left me-1"></i>{{ r.reason }}</div>
+    </div>
+  </div>
+</main>
+
+<!-- Reject Modal -->
+<div class="modal fade" #rejectModal tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold">Reject leave request</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="subtle small mb-3">
+          Let <span class="fw-semibold text-dark">{{ currentRequest?.name || 'the employee' }}</span> know why this request can't be approved.
+        </p>
+        <label class="form-label small fw-semibold">Reason for rejection</label>
+        <textarea
+          class="form-control"
+          rows="4"
+          placeholder="e.g. Coverage unavailable on requested dates..."
+          [(ngModel)]="rejectReasonText"
+        ></textarea>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button class="btn btn-ghost" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-reject" style="background: var(--danger); color: #fff; border: none;" (click)="confirmReject()">
+          Confirm reject
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Approve Modal -->
+<div class="modal fade" #approveModal tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold">Approve leave request</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="subtle small mb-3">
+          Confirm approval for <span class="fw-semibold text-dark">{{ currentRequest?.name }}</span>.
+        </p>
+        <label class="form-label small fw-semibold">Note (optional)</label>
+        <textarea class="form-control" rows="3" placeholder="Add a short note..." [(ngModel)]="approveNoteText"></textarea>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button class="btn btn-ghost" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-approve" (click)="confirmApprove()">Confirm approve</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div class="toast align-items-center text-bg-dark border-0" role="alert" #actionToast>
+    <div class="d-flex">
+      <div class="toast-body">{{ toastMessage }}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>

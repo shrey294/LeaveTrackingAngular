@@ -1,0 +1,138 @@
+:host {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --border: #e6e9f2;
+  --brand: #4f46e5;
+  --brand-soft: #eef0ff;
+  --success: #16a34a;
+  --success-soft: #e7f7ed;
+  --danger: #dc2626;
+  --danger-soft: #fdecec;
+  --warning: #d97706;
+  --warning-soft: #fff3e0;
+
+  display: block;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+:host  { font-family: 'Inter', system-ui, sans-serif; }
+
+:host {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.page-title { font-weight: 700; letter-spacing: -0.02em; }
+.subtle { color: var(--muted); }
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.stat-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px -16px rgba(15,23,42,.2); }
+.stat-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.stat-value { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+.stat-label { font-size: 13px; color: var(--muted); }
+
+.toolbar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+.search-input {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding-left: 38px;
+}
+.search-wrap { position: relative; }
+.search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+.filter-chip {
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.filter-chip:hover { color: var(--ink); }
+.filter-chip.active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.request-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+.request-card:hover { box-shadow: 0 10px 30px -20px rgba(15,23,42,.25); border-color: #d6dbe8; }
+
+.avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--brand-soft); color: var(--brand);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 600;
+}
+.meta { font-size: 13px; color: var(--muted); }
+.meta .dot { display:inline-block; width:3px; height:3px; border-radius:50%; background:var(--muted); margin: 0 8px; vertical-align: middle; }
+
+.badge-pill {
+  border-radius: 999px;
+  font-weight: 500;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+.b-pending { background: var(--warning-soft); color: var(--warning); }
+.b-approved { background: var(--success-soft); color: var(--success); }
+.b-rejected { background: var(--danger-soft); color: var(--danger); }
+.b-type { background: var(--brand-soft); color: var(--brand); }
+
+.btn-approve {
+  background: var(--success); color: #fff; border: none;
+  border-radius: 10px; padding: 8px 16px; font-weight: 500;
+}
+.btn-approve:hover { background: #128a3e; color: #fff; }
+.btn-reject {
+  background: #fff; color: var(--danger); border: 1px solid var(--danger);
+  border-radius: 10px; padding: 8px 16px; font-weight: 500;
+}
+.btn-reject:hover { background: var(--danger); color: #fff; }
+.btn-ghost {
+  background: transparent; color: var(--muted); border: 1px solid var(--border);
+  border-radius: 10px; padding: 8px 12px;
+}
+.btn-ghost:hover { color: var(--ink); }
+
+.reason {
+  background: #f8fafc; border: 1px dashed var(--border);
+  border-radius: 10px; padding: 10px 12px;
+  color: #334155; font-size: 14px; margin-top: 12px;
+}
+
+.navbar-custom {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.modal-content { border-radius: 16px; border: none; }
+.form-control, .form-select { border-radius: 10px; }
+
+@media (max-width: 576px) {
+  .stat-value { font-size: 22px; }
+}
