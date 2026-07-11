@@ -67,22 +67,22 @@
         <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
           <button
             class="filter-chip"
-            [class.active]="activeFilter === 'pending'"
-            (click)="setFilter('pending')"
+            [class.active]="activeFilter === 'Pending'"
+            (click)="setFilter('Pending')"
           >
             Pending <span class="ms-1 opacity-75">{{ userStats()?.pending }}</span>
           </button>
           <button
             class="filter-chip"
-            [class.active]="activeFilter === 'approved'"
-            (click)="setFilter('approved')"
+            [class.active]="activeFilter === 'Approved'"
+            (click)="setFilter('Approved')"
           >
             Approved
           </button>
           <button
             class="filter-chip"
-            [class.active]="activeFilter === 'rejected'"
-            (click)="setFilter('rejected')"
+            [class.active]="activeFilter === 'Rejected'"
+            (click)="setFilter('Rejected')"
           >
             Rejected
           </button>
@@ -112,43 +112,43 @@
     <div class="request-card" *ngFor="let r of filteredRequests; trackBy: trackById">
       <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
         <div class="d-flex gap-3">
-          <div class="avatar">{{ r.initials }}</div>
+          <div class="avatar">{{ r.alias }}</div>
           <div>
             <div class="d-flex align-items-center gap-2 flex-wrap">
-              <h6 class="mb-0 fw-semibold">{{ r.name }}</h6>
-              <span class="badge-pill b-type">{{ r.type }}</span>
+              <h6 class="mb-0 fw-semibold">{{ r.fullName }}</h6>
+              <span class="badge-pill b-type">{{ r.leaveName }}</span>
 
-              <span class="badge-pill b-pending" *ngIf="r.status === 'pending'">
+              <span class="badge-pill b-pending" *ngIf="r.status === 'Pending'">
                 <i class="fa-regular fa-hourglass me-1"></i>Pending
               </span>
-              <span class="badge-pill b-approved" *ngIf="r.status === 'approved'">
+              <span class="badge-pill b-approved" *ngIf="r.status === 'Approved'">
                 <i class="fa-solid fa-check me-1"></i>Approved
               </span>
-              <span class="badge-pill b-rejected" *ngIf="r.status === 'rejected'">
+              <span class="badge-pill b-rejected" *ngIf="r.status === 'Rejected'">
                 <i class="fa-solid fa-xmark me-1"></i>Rejected
               </span>
             </div>
             <div class="meta mt-1">
-              <i class="fa-solid fa-calendar me-1"></i>{{ r.from }} → {{ r.to }}
+              <i class="fa-solid fa-calendar me-1"></i>{{ r.startDate }} → {{ r.endDate }}
               <span class="dot"></span>
-              <i class="fa-solid fa-clock me-1"></i>{{ r.duration }}
+              <i class="fa-solid fa-clock me-1"></i>{{ r.days }}
               <span class="dot"></span>
-              Applied {{ r.applied }}
+              Applied {{ r.appliedAgo }}
             </div>
           </div>
         </div>
         <div class="d-flex gap-2 align-items-center">
-          <ng-container *ngIf="r.status !== 'pending'; else pendingActions">
+          <ng-container *ngIf="r.status !== 'Pending'; else pendingActions">
             <button class="btn btn-ghost btn-sm"><i class="fa-solid fa-eye me-1"></i>View</button>
           </ng-container>
           <ng-template #pendingActions>
-            <button class="btn btn-ghost btn-sm" (click)="openApprove(r.id)" title="Approve">
+            <button class="btn btn-ghost btn-sm" (click)="openApprove(r.leaveHistroyId)" title="Approve">
               <i class="fa-solid fa-eye"></i>
             </button>
-            <button class="btn btn-reject btn-sm" (click)="openReject(r.id)">
+            <button class="btn btn-reject btn-sm" (click)="openReject(r.leaveHistroyId)">
               <i class="fa-solid fa-xmark me-1"></i>Reject
             </button>
-            <button class="btn btn-approve btn-sm" (click)="openApprove(r.id)">
+            <button class="btn btn-approve btn-sm" (click)="openApprove(r.leaveHistroyId)">
               <i class="fa-solid fa-check me-1"></i>Approve
             </button>
           </ng-template>
@@ -169,7 +169,7 @@
       </div>
       <div class="modal-body">
         <p class="subtle small mb-3">
-          Let <span class="fw-semibold text-dark">{{ currentRequest?.name || 'the employee' }}</span> know why this request can't be approved.
+          Let <span class="fw-semibold text-dark">{{ currentRequest?.fullName || 'the employee' }}</span> know why this request can't be approved.
         </p>
         <label class="form-label small fw-semibold">Reason for rejection</label>
         <textarea
@@ -199,7 +199,7 @@
       </div>
       <div class="modal-body">
         <p class="subtle small mb-3">
-          Confirm approval for <span class="fw-semibold text-dark">{{ currentRequest?.name }}</span>.
+          Confirm approval for <span class="fw-semibold text-dark">{{ currentRequest?.fullName }}</span>.
         </p>
         <label class="form-label small fw-semibold">Note (optional)</label>
         <textarea class="form-control" rows="3" placeholder="Add a short note..." [(ngModel)]="approveNoteText"></textarea>

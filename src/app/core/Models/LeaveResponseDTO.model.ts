@@ -9,4 +9,5 @@ export interface LeaveResponseDTO {
   endDate?: string;
   days: string;
   reason: string;
+  appliedAgo: string;
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../Environments/environment';
@@ -28,5 +28,17 @@ export class LeaveRequestService {
 
     return this.http.get<LeaveResponseDTO[]>(
       `${this.baseurl}/LeaveManagement/Get_LeaveList_ByManager`);
+  }
+   updateLeaveStatus(status: string, leaveHistoryId: number) {
+
+    const params = new HttpParams()
+      .set('status', status)
+      .set('LeaveHistoryid', leaveHistoryId);
+
+    return this.http.post<any>(
+      `${this.baseurl}/LeaveManagement/LeaveStatus`,
+      {},
+      { params }
+    );
   }
 }
